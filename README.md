@@ -4,6 +4,8 @@ A ROS package that connects a ROS TurtleBot to the HarveyNet.
 
 This adapter package (node) will authorize the TurtleBot at the HarveyNet as `machine1`, owned by user `alice@email.com` by default (the machine ID is *hard-coded*).
 
+It is assumed that you have all the ROS infrastructure installed and configured on your computer, including the TurtleBot. Also the stable version of Node.js is required.
+
 ## Installation and running
 
 1. Clone the package repository under `<CATKIN_WS_DIR>/src`.
