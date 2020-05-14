@@ -1,0 +1,12 @@
+{
+  "name": "harveynet_adapter",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "pusher-js": "^6.0.2",
+    "rosnodejs": "^3.0.2"
+  }
+}

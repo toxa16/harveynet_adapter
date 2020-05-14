@@ -1,0 +1,10 @@
+/*
+
+!scripts/
+!src/
+!.gitignore
+!CMakeLists.txt
+!package-lock.json
+!package.json
+!package.xml
+!README.md
