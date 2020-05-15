@@ -12,6 +12,23 @@ const authEndpoint =
 const machineId = 'machine1';		// authorize as "machine1"
 
 
+// pusher message chunking (copy-pasted)
+function triggerChunked(channel, event, data) {
+  const chunkSize = 9999;
+  const str = JSON.stringify(data);
+  const msgId = Math.random() + '';
+  for (var i = 0; i*chunkSize < str.length; i++) {
+    // TODO: use pusher.triggerBatch for better performance
+    channel.trigger(event + '-chunked', { 
+      id: msgId, 
+      index: i, 
+      chunk: str.substr(i*chunkSize, chunkSize), 
+      final: chunkSize*(i+1) >= str.length
+    });
+  }
+}
+
+
 // init pusher & presence channel
 const pusher = new Pusher(appKey, {
 	cluster,
@@ -27,20 +44,39 @@ const channel = pusher.subscribe(channelName);
 // init adapter node
 rosnodejs.initNode('/adapter')
 	.then(() => {		
-		const logInterval = 1000;
-		let logAllowed = true;
+		const odomInterval = 1000;
+		let odomTriggerAllowed = true;
 		setInterval(() => {
-			logAllowed = true;
-		}, logInterval);
+			odomTriggerAllowed = true;
+		}, odomInterval);
 		const nh = rosnodejs.nh;
-		const sub = nh.subscribe('/odom', 'nav_msgs/Odometry', (msg) => {
+		// odometry
+		const sub = nh.subscribe('/odom', 'nav_msgs/Odometry', msg => {
 			const { x, y } = msg.pose.pose.position; 
 			console.log(`x: ${x}, y: ${y}`);
-			if (logAllowed) {
+			if (odomTriggerAllowed) {
 				channel.trigger('client-set-coordinates', { x, y });
-				logAllowed = false;
+				odomTriggerAllowed = false;
 			}
 		});
+		// camera image
+		const cameraTriggerInterval = 200;
+		let cameraTriggerAllowed = true;
+		setInterval(() => {
+			cameraTriggerAllowed = true;
+		}, cameraTriggerInterval);
+		const sub2 = nh.subscribe(
+			'/camera/rgb/image_raw/compressed',
+			'sensor_msgs/CompressedImage',
+			msg => {
+				if (cameraTriggerAllowed) {
+					const _image = Buffer.from(msg.data).toString('base64');
+					const image = 'data:image/jpg;base64,' + _image;
+					triggerChunked(channel, 'client-set-camera-image', { image });
+					cameraTriggerAllowed = false;
+				}
+			},
+		);
 
 		const linearSpeed = 0.5;
 		const angularSpeed = 1;
