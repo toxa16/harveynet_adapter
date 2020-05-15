@@ -22,30 +22,37 @@ $ cd harveynet_adapter
 $ npm install
 ```
 
-3. Source the setup file:
+3. It may be necessary to run `catkin_make` (from corresponding location).
+
+4. (Assuming you are still in the directory from step 1) make the `adapter_node.js` executable:
+
+```bash
+$ chmod +x ./scripts/adapter_node.js
+```
+
+5. Source the setup file:
 
 ```bash
 $ . ~/catkin_ws/devel/setup.bash
 ```
 
-4. Launch the TurtleBot Gazebo:
+6. Launch the TurtleBot Gazebo:
 
 ```bash
 $ roslaunch turtlebot_gazebo turtlebot_world.launch
 ```
 
-5. In a new terminal, run the adapter node:
+7. In a new terminal, run the adapter node:
 
 ```
 $ rosrun harveynet_adapter adapter_node.js
 ```
-
 Now the TurtleBot machine is connected to the HarveyNet.
 
-6. Open the HarveyNet Control Panel in your web browser: https://harveynet-control-panel.herokuapp.com
+8. Open the HarveyNet Control Panel in your web browser: https://harveynet-control-panel.herokuapp.com
 
-7. Login as `alice@email.com`
+9. Login as user `alice@email.com`, select machine `machine1`.
 
-8. Now you can control the Turtlebot from the HarveyNet.
+10. Now you can control the Turtlebot from the HarveyNet.
 
-9. (Optionally) Kill the adapter node process to see the machine going offline at the Control Panel.
+11. (Optionally) Kill the adapter node process to see the machine going offline at the Control Panel.
