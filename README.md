@@ -12,6 +12,7 @@ It is assumed that you have all the ROS infrastructure installed and configured 
 
 ```bash
 $ cd <CATKIN_WS_DIR>/src
+$ rosdep install --from-paths src -i -y
 $ git clone <THIS_REPO_URL>
 $ cd harveynet_adapter
 ```
@@ -38,8 +39,9 @@ $ . ~/catkin_ws/devel/setup.bash
 
 6. Launch the TurtleBot Gazebo:
 
+turtlebot 3:
 ```bash
-$ roslaunch turtlebot_gazebo turtlebot_world.launch
+$ TURTLEBOT3_MODEL=burger roslaunch turtlebot3_gazebo turtlebot3_world.launch
 ```
 
 7. In a new terminal, run the adapter node:

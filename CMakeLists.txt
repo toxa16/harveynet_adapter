@@ -9,7 +9,7 @@ project(harveynet_adapter)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   nav_msgs
-  rosnodejs
+
   rospy
 )
 
@@ -105,7 +105,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES harveynet_adapter
-#  CATKIN_DEPENDS nav_msgs rosnodejs rospy
+#  CATKIN_DEPENDS nav_msgs rospy
 #  DEPENDS system_lib
 )
 
