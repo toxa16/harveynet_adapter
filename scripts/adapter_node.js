@@ -47,7 +47,7 @@ const controlChannel = pusher.subscribe(controlChannelName);
 // init adapter node
 rosnodejs.initNode('/adapter')
 	.then(() => {		
-		const odomInterval = 1000;
+		const odomInterval = 500;
 		let odomTriggerAllowed = true;
 		setInterval(() => {
 			odomTriggerAllowed = true;
