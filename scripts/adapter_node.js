@@ -93,7 +93,9 @@ rosnodejs.initNode('/adapter')
 			commandObj.az = a * angularSpeed;
 		});
 
-		const pub = nh.advertise('/cmd_vel_mux/input/teleop', 'geometry_msgs/Twist');
+		const controlTopic2 = '/cmd_vel_mux/input/teleop';	// TurtleBot2
+		const controlTopic3 = '/cmd_vel';		// TurtleBot3
+		const pub = nh.advertise(controlTopic3, 'geometry_msgs/Twist');
 		setInterval(() => {
 			const { lx, az } = commandObj;		
 			const msg = {

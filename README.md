@@ -41,7 +41,7 @@ $ . ~/catkin_ws/devel/setup.bash
 
 turtlebot 3:
 ```bash
-$ TURTLEBOT3_MODEL=burger roslaunch turtlebot3_gazebo turtlebot3_world.launch
+$ TURTLEBOT3_MODEL=waffle roslaunch turtlebot3_gazebo turtlebot3_world.launch
 ```
 
 7. In a new terminal, run the adapter node:
