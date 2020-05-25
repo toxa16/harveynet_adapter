@@ -7,7 +7,7 @@ const Pusher = require('pusher-js');
 const appKey = 'fa20e14745781ba145ef';
 const cluster = 'eu';
 const authEndpoint =
-	'https://us-central1-harveynet-dcfee.cloudfunctions.net/pusherAuthMachine';
+	'https://harveynet-ownership-server.herokuapp.com/pusher/auth/machine';
 
 const machineId = 'machine1';		// authorize as "machine1"
 
@@ -39,6 +39,9 @@ const pusher = new Pusher(appKey, {
 });
 const channelName = `presence-${machineId}`;
 const channel = pusher.subscribe(channelName);
+
+const controlChannelName = `presence-control-${machineId}`;
+const controlChannel = pusher.subscribe(controlChannelName);
 
 
 // init adapter node
@@ -84,7 +87,7 @@ rosnodejs.initNode('/adapter')
 			lx: 0,
 			az: 0,
 		}
-		channel.bind('client-move-command', command => {
+		controlChannel.bind('client-move-command', command => {
 			const { l, a } = command;
 			commandObj.lx = l * linearSpeed;
 			commandObj.az = a * angularSpeed;
