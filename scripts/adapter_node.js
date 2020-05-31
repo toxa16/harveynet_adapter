@@ -54,14 +54,24 @@ rosnodejs.initNode('/adapter')
 		}, odomInterval);
 		const nh = rosnodejs.nh;
 		// odometry
-		const sub = nh.subscribe('/odom', 'nav_msgs/Odometry', msg => {
-			const { x, y } = msg.pose.pose.position; 
+		nh.subscribe('/odom', 'nav_msgs/Odometry', msg => {
+			const { x, y } = msg.pose.pose.position;
 			console.log(`x: ${x}, y: ${y}`);
 			if (odomTriggerAllowed) {
 				channel.trigger('client-set-coordinates', { x, y });
 				odomTriggerAllowed = false;
+
+				// simulating GPS coords
+				const baseLat = 50.422;
+    		const baseLng = 29.973;
+    		const mLat = 5 / 10;
+				const mLng = 8 / 10;
+				const latitude = baseLat + y * 0.001 * mLat;
+				const longitude = baseLng + x * 0.001 * mLng;
+				channel.trigger('client-set-navsat', { latitude, longitude });
 			}
 		});
+
 		// camera image
 		const cameraTriggerInterval = 200;
 		let cameraTriggerAllowed = true;
@@ -81,6 +91,7 @@ rosnodejs.initNode('/adapter')
 			},
 		);
 
+		// control
 		const linearSpeed = 0.5;
 		const angularSpeed = 1;
 		const commandObj = {
@@ -92,10 +103,9 @@ rosnodejs.initNode('/adapter')
 			commandObj.lx = l * linearSpeed;
 			commandObj.az = a * angularSpeed;
 		});
-
-		const controlTopic2 = '/cmd_vel_mux/input/teleop';	// TurtleBot2
-		const controlTopic3 = '/cmd_vel';		// TurtleBot3
-		const pub = nh.advertise(controlTopic3, 'geometry_msgs/Twist');
+		//const controlTopic = '/cmd_vel_mux/input/teleop';	// TurtleBot2
+		const controlTopic = '/cmd_vel';		// TurtleBot3
+		const pub = nh.advertise(controlTopic, 'geometry_msgs/Twist');
 		setInterval(() => {
 			const { lx, az } = commandObj;		
 			const msg = {
