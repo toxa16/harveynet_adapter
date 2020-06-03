@@ -122,20 +122,28 @@ function moveControlProcedure(nh) {
 }
 
 
+// tool control
+function openToolControlTopic(nh, msgFormat, topic) {
+	const pub = nh.advertise(`/harvey/control/${topic}`, msgFormat);
+	controlChannel.bind(`client-tool-${topic}`, command => {
+		const msg = { data: command.value };
+		pub.publish(msg);
+	});
+}
+function toolControlProcedure(nh) {
+	openToolControlTopic(nh, 'std_msgs/Bool', 'binary_0');
+	openToolControlTopic(nh, 'std_msgs/Bool', 'binary_1');
+}
+
+
 // init adapter node
 rosnodejs.initNode('/adapter')
 	.then(() => {
 		const nh = rosnodejs.nh;
 
 		// you can disable a feature by commenting out correspondind line below
-
 		odomProcedure(nh);
 		cameraProcedure(nh);
 		moveControlProcedure(nh);
-
-		// tool control
-		/*const bin1 = nh.advertise('/harvey/binary_1', 'std_msgs/Bool');
-		controlChannel.bind('client-control-binary-1', command => {
-			console.log(command);
-		});*/
+		toolControlProcedure(nh);
 	});
