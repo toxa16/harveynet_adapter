@@ -58,3 +58,21 @@ Now the TurtleBot machine is connected to the HarveyNet.
 10. Now you can control the Turtlebot from the HarveyNet.
 
 11. (Optionally) Kill the adapter node process to see the machine going offline at the Control Panel.
+
+
+## Setting machine ID (auth)
+
+```
+$ MACHINE_ID=machine4 rosrun harveynet_adapter adapter_node.js
+```
+
+If `MACHINE_ID` is not set, it defaults to `machine1`.
+
+
+## Switching to TurtleBot 2
+
+```
+$ TURTLEBOT2=true rosrun harveynet_adapter adapter_node.js
+```
+
+If the `TURTLEBOT2` variable is omitted, the adapter assumes that TurtleBot 3 is being used.
