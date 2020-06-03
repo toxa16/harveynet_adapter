@@ -58,7 +58,6 @@ rosnodejs.initNode('/adapter')
 			const { x, y } = msg.pose.pose.position;
 			console.log(`x: ${x}, y: ${y}`);
 			if (odomTriggerAllowed) {
-				channel.trigger('client-set-coordinates', { x, y });
 				odomTriggerAllowed = false;
 
 				// simulating GPS coords
@@ -69,6 +68,7 @@ rosnodejs.initNode('/adapter')
 				const latitude = baseLat + y * 0.001 * mLat;
 				const longitude = baseLng + x * 0.001 * mLng;
 				channel.trigger('client-set-navsat', { latitude, longitude });
+				channel.trigger('client-set-coordinates', { x, y });
 			}
 		});
 
@@ -103,8 +103,10 @@ rosnodejs.initNode('/adapter')
 			commandObj.lx = l * linearSpeed;
 			commandObj.az = a * angularSpeed;
 		});
-		//const controlTopic = '/cmd_vel_mux/input/teleop';	// TurtleBot2
-		const controlTopic = '/cmd_vel';		// TurtleBot3
+		let controlTopic = '/cmd_vel';		// TurtleBot3
+		if (process.env.TURTLEBOT2) {
+			controlTopic = '/cmd_vel_mux/input/teleop';	// TurtleBot2
+		}
 		const pub = nh.advertise(controlTopic, 'geometry_msgs/Twist');
 		setInterval(() => {
 			const { lx, az } = commandObj;		
@@ -114,4 +116,10 @@ rosnodejs.initNode('/adapter')
 			};
 			pub.publish(msg);
 		}, 10);
+
+		// tool control
+		/*const bin1 = nh.advertise('/harvey/binary_1', 'std_msgs/Bool');
+		controlChannel.bind('client-control-binary-1', command => {
+			console.log(command);
+		});*/
 	});
