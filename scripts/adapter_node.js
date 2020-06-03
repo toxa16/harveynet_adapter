@@ -9,7 +9,7 @@ const cluster = 'eu';
 const authEndpoint =
 	'https://harveynet-ownership-server.herokuapp.com/pusher/auth/machine';
 
-const machineId = 'machine1';		// authorize as "machine1"
+const machineId = process.env.MACHINE_ID || 'machine1';		// authorize as "machine1"
 
 
 // pusher message chunking (copy-pasted)
