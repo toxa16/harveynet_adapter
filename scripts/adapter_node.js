@@ -137,6 +137,10 @@ function toolControlProcedure(nh) {
 	openToolControlTopic(nh, 'std_msgs/Bool', 'binary_3');
 	openToolControlTopic(nh, 'std_msgs/Bool', 'binary_4');
 	openToolControlTopic(nh, 'std_msgs/Bool', 'binary_5');
+	openToolControlTopic(nh, 'std_msgs/Bool', 'binary_6');
+	openToolControlTopic(nh, 'std_msgs/Bool', 'binary_7');
+	openToolControlTopic(nh, 'std_msgs/Bool', 'binary_8');
+	openToolControlTopic(nh, 'std_msgs/Bool', 'binary_9');
 }
 
 
