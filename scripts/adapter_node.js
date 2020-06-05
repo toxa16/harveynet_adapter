@@ -131,7 +131,7 @@ function openToolControlTopic(nh, msgFormat, topic) {
 	});
 }
 function toolControlProcedure(nh) {
-	// setting declaratively
+	// binary
 	openToolControlTopic(nh, 'std_msgs/Bool', 'binary_1');
 	openToolControlTopic(nh, 'std_msgs/Bool', 'binary_2');
 	openToolControlTopic(nh, 'std_msgs/Bool', 'binary_3');
@@ -141,6 +141,10 @@ function toolControlProcedure(nh) {
 	openToolControlTopic(nh, 'std_msgs/Bool', 'binary_7');
 	openToolControlTopic(nh, 'std_msgs/Bool', 'binary_8');
 	openToolControlTopic(nh, 'std_msgs/Bool', 'binary_9');
+	// analog
+	openToolControlTopic(nh, 'std_msgs/Int8', 'analog_1');
+	openToolControlTopic(nh, 'std_msgs/Int8', 'analog_2');
+	openToolControlTopic(nh, 'std_msgs/Int8', 'analog_3');
 }
 
 
