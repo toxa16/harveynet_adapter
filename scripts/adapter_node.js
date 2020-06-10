@@ -93,15 +93,15 @@ function cameraProcedure(nh) {
 }
 
 
-// movement control
-function moveControlProcedure(nh) {
+// movement control (TurtleBot)
+function turtlebotMoveControlProcedure(nh) {
 	const linearSpeed = 0.5;
 	const angularSpeed = 1;
 	const commandObj = {
 		lx: 0,
 		az: 0,
 	}
-	controlChannel.bind('client-move-command', command => {
+	controlChannel.bind('client-move-command-turtlebot', command => {
 		const { l, a } = command;
 		commandObj.lx = l * linearSpeed;
 		commandObj.az = a * angularSpeed;
@@ -156,6 +156,6 @@ rosnodejs.initNode('/adapter')
 		// you can disable a feature by commenting out correspondind line below
 		odomProcedure(nh);
 		cameraProcedure(nh);
-		moveControlProcedure(nh);
+		turtlebotMoveControlProcedure(nh);
 		toolControlProcedure(nh);
 	});
