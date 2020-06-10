@@ -122,6 +122,27 @@ function turtlebotMoveControlProcedure(nh) {
 }
 
 
+// stream-based movement control
+function streamMoveControlProcedure(nh) {
+	const linearSpeed = 1;		// CONFIG
+	const angularSpeed = 1;		// CONFIG
+
+	const pub = nh.advertise('/cmd_vel', 'geometry_msgs/Twist');
+	
+	// TODO: refactor this
+	controlChannel.bind('client-move-command-stream', command => {
+		const { l, a } = command;
+		const lx = l * linearSpeed;
+		const az = a * angularSpeed;	
+		const msg = {
+			linear: { x: lx, y: 0, z: 0 },
+			angular: { x: 0, y: 0, z: az },
+		};
+		pub.publish(msg);
+	});
+}
+
+
 // tool control
 function openToolControlTopic(nh, msgFormat, topic) {
 	const pub = nh.advertise(`/harvey/control/${topic}`, msgFormat);
@@ -156,6 +177,7 @@ rosnodejs.initNode('/adapter')
 		// you can disable a feature by commenting out correspondind line below
 		odomProcedure(nh);
 		cameraProcedure(nh);
-		turtlebotMoveControlProcedure(nh);
+		//turtlebotMoveControlProcedure(nh);
+		streamMoveControlProcedure(nh);
 		toolControlProcedure(nh);
 	});
