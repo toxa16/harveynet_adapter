@@ -73,7 +73,7 @@ function odomProcedure(nh) {
 
 // camera
 function cameraProcedure(nh) {
-	const cameraTriggerInterval = 200;
+	const cameraTriggerInterval = 300;
 	let cameraTriggerAllowed = true;
 	setInterval(() => {
 		cameraTriggerAllowed = true;
