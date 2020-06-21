@@ -54,7 +54,7 @@ let peerConnection = new RTCPeerConnection({
 
 peerConnection.onicecandidate = function (e) {
   if (e.candidate) {
-    console.log('onicecandidate')
+    //console.log('onicecandidate')
     channel.trigger(iceEventName, {
       target: 'callee',
       candidate: e.candidate,
@@ -63,7 +63,7 @@ peerConnection.onicecandidate = function (e) {
 }
 
 channel.bind(iceEventName, (data) => {
-  console.log('ice received')
+  //console.log('ice received')
   var candidate = new RTCIceCandidate(data.candidate);
   peerConnection.addIceCandidate(candidate);
 });
@@ -80,13 +80,12 @@ function toRgbaArrayBuffer(buf) {
   var ab = new ArrayBuffer(buf.length * 4 / 3);
   var view = new Uint8Array(ab);
   let c = 0;
-  for (var i = 0; i < buf.length; ++i) {
-    view[c] = buf[i];
-    c++;
-    if ((i + 1) % 3 === 0) {
-      view[c] = 255;
-      c++;
-    }
+  for (var i = 0; i < buf.length; i+=3) {
+    view[c] = buf[i + 2];     // R channed
+    view[c + 1] = buf[i + 1]; // G channel
+    view[c + 2] = buf[i];     // B channel
+    view[c + 3] = 255;        // A channel
+    c += 4;
   }
   return ab;
 }
