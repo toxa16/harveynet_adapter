@@ -25,25 +25,10 @@ var channel = pusher.subscribe(channelName);
 
 
 const iceServers = [
-  /*{urls:'stun:stun01.sipphone.com'},
-  {urls:'stun:stun.ekiga.net'},
-  {urls:'stun:stun.fwdnet.net'},
-  {urls:'stun:stun.ideasip.com'},
-  {urls:'stun:stun.iptel.org'},
   {urls:'stun:stun.rixtelecom.se'},
-  {urls:'stun:stun.schlund.de'},*/
-  {urls:'stun:stun.l.google.com:19302'},
-  {urls:'stun:stun1.l.google.com:19302'},
-  {urls:'stun:stun2.l.google.com:19302'},
-  {urls:'stun:stun3.l.google.com:19302'},
-  {urls:'stun:stun4.l.google.com:19302'},
-  /*{urls:'stun:stunserver.org'},
+  {urls:'stun:stunserver.org'},
   {urls:'stun:stun.softjoys.com'},
-  {urls:'stun:stun.voiparound.com'},
-  {urls:'stun:stun.voipbuster.com'},
-  {urls:'stun:stun.voipstunt.com'},
   {urls:'stun:stun.voxgratia.org'},
-  {urls:'stun:stun.xten.com'},*/
 ];
 
 
@@ -56,7 +41,7 @@ peerConnection.onicecandidate = function (e) {
   if (e.candidate) {
     //console.log('onicecandidate')
     channel.trigger(iceEventName, {
-      target: 'callee',
+      target: 'user',
       candidate: e.candidate,
     })
   }
@@ -65,7 +50,10 @@ peerConnection.onicecandidate = function (e) {
 channel.bind(iceEventName, (data) => {
   //console.log('ice received')
   var candidate = new RTCIceCandidate(data.candidate);
-  peerConnection.addIceCandidate(candidate);
+  peerConnection.addIceCandidate(candidate)
+    .catch(err => {
+      console.error(err);
+    });
 });
 
 channel.bind(answerEventName, async (data) => {
@@ -129,8 +117,8 @@ async function start() {
   const offer = await peerConnection.createOffer();
   await peerConnection.setLocalDescription(offer);
   channel.trigger(offerEventName, {
-    name: 'caller',
-    target: 'callee',
+    name: 'machine',
+    target: 'user',
     sdp: peerConnection.localDescription,
   });
 }
