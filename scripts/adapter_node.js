@@ -124,16 +124,20 @@ function turtlebotMoveControlProcedure(nh) {
 
 // stream-based movement control
 function streamMoveControlProcedure(nh) {
-	const linearSpeed = 1;		// CONFIG
-	const angularSpeed = 1;		// CONFIG
+	const linearCoeff = 1 / 20;		// CONFIG
+	const angularCoeff = 1 / 20;		// CONFIG
 
-	const pub = nh.advertise('/cmd_vel', 'geometry_msgs/Twist');
+	let controlTopic = '/cmd_vel';		// TurtleBot3
+	if (process.env.TURTLEBOT2) {
+		controlTopic = '/cmd_vel_mux/input/teleop';	// TurtleBot2
+	}
+	const pub = nh.advertise(controlTopic, 'geometry_msgs/Twist');
 	
 	// TODO: refactor this
 	controlChannel.bind('client-move-command-stream', command => {
 		const { l, a } = command;
-		const lx = l * linearSpeed;
-		const az = a * angularSpeed;	
+		const lx = l * linearCoeff;
+		const az = a * angularCoeff;	
 		const msg = {
 			linear: { x: lx, y: 0, z: 0 },
 			angular: { x: 0, y: 0, z: az },
