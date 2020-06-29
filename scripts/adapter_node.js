@@ -152,8 +152,36 @@ function streamMoveControlProcedure(nh) {
 function joystickControlProcedure(nh) {
 	const pub = nh.advertise('/cmd_vel', 'sensor_msgs/Joy');
 	let seq = 0;
+
+	// select
+	controlChannel.bind('client-select-click', () => {
+		const header = {
+			seq,
+			stamp: Date.now(),
+			frame_id: uuidv4(),
+		};
+		const axes = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+		const buttons = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
+		const msg = { header,	axes, buttons };
+		pub.publish(msg);
+		seq++;
+	});
 	
-	// TODO: refactor this
+	// start
+	controlChannel.bind('client-start-click', () => {
+		const header = {
+			seq,
+			stamp: Date.now(),
+			frame_id: uuidv4(),
+		};
+		const axes = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+		const buttons = [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0];
+		const msg = { header,	axes, buttons };
+		pub.publish(msg);
+		seq++;
+	});
+
+	// sticks
 	controlChannel.bind('client-move-command-stream', command => {
 		const header = {
 			seq,
