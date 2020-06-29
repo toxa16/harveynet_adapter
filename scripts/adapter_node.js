@@ -157,7 +157,7 @@ function joystickControlProcedure(nh) {
 	controlChannel.bind('client-select-click', () => {
 		const header = {
 			seq,
-			stamp: Date.now(),
+			stamp: rosnodejs.Time.now(),
 			frame_id: uuidv4(),
 		};
 		const axes = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
@@ -171,7 +171,7 @@ function joystickControlProcedure(nh) {
 	controlChannel.bind('client-start-click', () => {
 		const header = {
 			seq,
-			stamp: Date.now(),
+			stamp: rosnodejs.Time.now(),
 			frame_id: uuidv4(),
 		};
 		const axes = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
@@ -185,7 +185,7 @@ function joystickControlProcedure(nh) {
 	controlChannel.bind('client-move-command-stream', command => {
 		const header = {
 			seq,
-			stamp: Date.now(),
+			stamp: rosnodejs.Time.now(),
 			frame_id: uuidv4(),
 		};
 		const { l, a } = command;
