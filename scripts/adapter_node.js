@@ -2,6 +2,7 @@
 
 const rosnodejs = require('rosnodejs');
 const Pusher = require('pusher-js');
+const uuidv4 = require('uuid').v4;
 
 
 const appKey = 'fa20e14745781ba145ef';
@@ -147,6 +148,30 @@ function streamMoveControlProcedure(nh) {
 }
 
 
+// joystick control
+function joystickControlProcedure(nh) {
+	const pub = nh.advertise('/cmd_vel', 'sensor_msgs/Joy');
+	let seq = 0;
+	
+	// TODO: refactor this
+	controlChannel.bind('client-move-command-stream', command => {
+		const header = {
+			seq,
+			stamp: Date.now(),
+			frame_id: uuidv4(),
+		};
+		const { l, a } = command;
+		const linear = l / 100;
+		const angular = a / 100;	
+		const axes = [0.0, linear, angular, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+		const buttons = [];
+		const msg = { header,	axes, buttons };
+		pub.publish(msg);
+		seq++;
+	});
+}
+
+
 // tool control
 function openToolControlTopic(nh, msgFormat, topic) {
 	const pub = nh.advertise(`/harvey/control/${topic}`, msgFormat);
@@ -182,6 +207,7 @@ rosnodejs.initNode('/adapter')
 		odomProcedure(nh);
 		cameraProcedure(nh);
 		//turtlebotMoveControlProcedure(nh);
-		streamMoveControlProcedure(nh);
+		//streamMoveControlProcedure(nh);
+		joystickControlProcedure(nh);
 		toolControlProcedure(nh);
 	});

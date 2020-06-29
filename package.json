@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "pusher-js": "^6.0.2",
-    "rosnodejs": "^3.0.2"
+    "rosnodejs": "^3.0.2",
+    "uuid": "^8.2.0"
   }
 }
